@@ -1,0 +1,4 @@
+**/node_modules/**
+javascript/html5/src/playwright-report/**
+javascript/html5/src/test-results/**
+javascript/html5/src/coverage/**

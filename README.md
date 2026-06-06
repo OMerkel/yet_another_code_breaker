@@ -1,6 +1,6 @@
 # Yet Another Code Breaker
 
-This repository now hosts Yet Another Code Breaker as the primary HTML5 implementation in `javascript/html5/src`.
+This repository hosts Yet Another Code Breaker as the primary HTML5 implementation in `javascript/html5/src`.
 
 ## Main Requirements Derived From `doc/rules.md`
 

@@ -62,27 +62,40 @@ const renderCurrentGuess = (board) =>
 	}).join("");
 
 const renderHistory = (board, texts) => {
-	if (board.history.length === 0) {
+	const historyItems = board.history
+		.map(
+			(entry, index) => `
+				<li class="history-item">
+					<span class="history-index">#${index + 1}</span>
+					<div class="history-guess">${entry.guessDisplay
+						.map((item) => renderToken(item))
+						.join("")}</div>
+					<div class="feedback-badges">
+						<span class="feedback-badge exact">${escapeHtml(texts.exactLabel)} ${entry.exact}</span>
+						<span class="feedback-badge misplaced">${escapeHtml(texts.misplacedLabel)} ${entry.misplaced}</span>
+					</div>
+				</li>`,
+		)
+		.join("");
+
+	// Show current guess at the end only while game is still in progress
+	const currentGuessItem =
+		board.status === "playing"
+			? `
+		<li class="history-item current-guess-item">
+			<span class="history-index">#${board.history.length + 1}</span>
+			<div class="history-guess">${renderCurrentGuess(board)}</div>
+		</li>`
+			: "";
+
+	if (board.history.length === 0 && board.currentGuess.length === 0) {
 		return `<p class="empty-history">${escapeHtml(texts.noAttemptsYet)}</p>`;
 	}
 
 	return `
 		<ol class="history-list">
-			${board.history
-				.map(
-					(entry, index) => `
-						<li class="history-item">
-							<span class="history-index">#${index + 1}</span>
-							<div class="history-guess">${entry.guessDisplay
-								.map((item) => renderToken(item))
-								.join("")}</div>
-							<div class="feedback-badges">
-								<span class="feedback-badge exact">${escapeHtml(texts.exactLabel)} ${entry.exact}</span>
-								<span class="feedback-badge misplaced">${escapeHtml(texts.misplacedLabel)} ${entry.misplaced}</span>
-							</div>
-						</li>`,
-				)
-				.join("")}
+			${historyItems}
+			${currentGuessItem}
 		</ol>
 	`;
 };
@@ -121,6 +134,8 @@ export const createRenderer = (root, onAction) => {
 	const render = (board, viewModel) => {
 		if (!board) {
 			root.innerHTML = `<div class="hero-card"><p class="status-message">${escapeHtml(viewModel.texts.loading)}</p></div>`;
+			const statusEl = document.getElementById("game-status");
+			if (statusEl) statusEl.innerHTML = "";
 			return;
 		}
 
@@ -147,10 +162,7 @@ export const createRenderer = (root, onAction) => {
 							<div class="label-row"><h3>${escapeHtml(texts.secretLabel)}</h3><span class="inline-note">${escapeHtml(secretLabel)}</span></div>
 							<div class="secret-row">${renderSecret(board, texts)}</div>
 						</div>
-						<div>
-							<div class="label-row"><h3>${escapeHtml(texts.currentGuessLabel)}</h3></div>
-							<div class="current-row">${renderCurrentGuess(board)}</div>
-						</div>
+
 					</div>
 					<div class="history-card">
 						<h2 class="card-title">${escapeHtml(texts.historyTitle)}</h2>
@@ -159,23 +171,26 @@ export const createRenderer = (root, onAction) => {
 				</section>
 
 				<section class="hero-grid">
-					<div class="status-card">
-						<h2 class="card-title">${escapeHtml(texts.statusCardTitle)}</h2>
-						<p class="status-message">${escapeHtml(statusHeadline(board, texts))} — ${escapeHtml(texts.statusBody(board))}</p>
-					</div>
 					<div class="keypad-card">
 						<h2 class="card-title">${escapeHtml(texts.keypadTitle)}</h2>
 						<div class="keypad-grid">${board.keypad.map((item) => renderKeypadButton(item, keypadEnabled)).join("")}</div>
 						<div class="keypad-actions">
+							<button class="keypad-button submit" type="button" data-input-action="submit"${board.canSubmit ? "" : " disabled"}>${escapeHtml(texts.submit)}</button>
 							<button class="keypad-button utility" type="button" data-input-action="backspace"${keypadEnabled ? "" : " disabled"}>${escapeHtml(texts.backspace)}</button>
 							<button class="keypad-button utility" type="button" data-input-action="clear"${keypadEnabled ? "" : " disabled"}>${escapeHtml(texts.clear)}</button>
-							<button class="keypad-button submit" type="button" data-input-action="submit"${board.canSubmit ? "" : " disabled"}>${escapeHtml(texts.submit)}</button>
 						</div>
 					</div>
 				</section>
 
 			</div>
 		`;
+		const statusEl = document.getElementById("game-status");
+		if (statusEl) {
+			statusEl.innerHTML = `
+				<h2 class="card-title">${escapeHtml(texts.statusCardTitle)}</h2>
+				<p class="status-message">${escapeHtml(statusHeadline(board, texts))} — ${escapeHtml(texts.statusBody(board))}</p>
+			`;
+		}
 	};
 
 	return { render };

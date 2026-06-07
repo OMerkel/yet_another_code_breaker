@@ -31,11 +31,14 @@
       <section id="view-game" class="view view-game">
         <div class="board-stage">
           <div id="board" class="board-root" aria-live="polite"></div>
-          <aside id="game-highscores" class="game-highscores" aria-label="Current highscores" aria-live="polite">
-            <div class="highscore-item"><span id="label-score-today">Today</span><strong id="game-score-today">-</strong></div>
-            <div class="highscore-item"><span id="label-score-week">Week</span><strong id="game-score-week">-</strong></div>
-            <div class="highscore-item"><span id="label-score-month">Month</span><strong id="game-score-month">-</strong></div>
-          </aside>
+          <div class="board-sidebar">
+            <aside id="game-highscores" class="game-highscores" aria-label="Current highscores" aria-live="polite">
+              <div class="highscore-item"><span id="label-score-today">Today</span><strong id="game-score-today">-</strong></div>
+              <div class="highscore-item"><span id="label-score-week">Week</span><strong id="game-score-week">-</strong></div>
+              <div class="highscore-item"><span id="label-score-month">Month</span><strong id="game-score-month">-</strong></div>
+            </aside>
+            <div id="game-status" class="game-status" aria-live="polite"></div>
+          </div>
         </div>
       </section>
 

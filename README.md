@@ -2,6 +2,10 @@
 
 This repository hosts Yet Another Code Breaker as the primary HTML5 implementation in `javascript/html5/src`.
 
+## Play Online
+
+- [Start game now...](https://omerkel.github.io/yet_another_code_breaker/javascript/html5/src/)
+
 ## Main Requirements Derived From `doc/rules.md`
 
 - Deductive gameplay with a hidden code and feedback for exact and misplaced symbols

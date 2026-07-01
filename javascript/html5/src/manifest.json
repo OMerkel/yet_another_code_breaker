@@ -1,6 +1,6 @@
 {
 	"name": "Yet Another Code Breaker",
-	"short_name": "CodeBreaker",
+	"short_name": "Code Breaker",
 	"description": "Deduce the hidden code with configurable symbols, attempts, persistent highscores, and offline support.",
 	"start_url": "./",
 	"display": "standalone",

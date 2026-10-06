@@ -1,0 +1,29 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+CPP17_FLAGS = select({
+    "@bazel_tools//src/conditions:windows": ["/std:c++17"],
+    "//conditions:default": ["-std=c++17"],
+})
+
+cc_library(
+    name = "codebreaker_lib",
+    srcs = ["src/codebreaker.cc"],
+    hdrs = ["inc/codebreaker.h"],
+    copts = CPP17_FLAGS,
+    strip_include_prefix = "inc",
+)
+
+cc_binary(
+    name = "codebreaker",
+    srcs = ["src/main.cc"],
+    copts = CPP17_FLAGS,
+    deps = [":codebreaker_lib"],
+)
+
+cc_test(
+    name = "codebreaker_test",
+    size = "small",
+    srcs = ["test/codebreaker_test.cc"],
+    copts = CPP17_FLAGS,
+    deps = [":codebreaker_lib"],
+)
